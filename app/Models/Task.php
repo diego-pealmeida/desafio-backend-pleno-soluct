@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\TaskStatus;
+use App\Models\Scopes\FilterUserId;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,6 +24,13 @@ class Task extends Model
             'due_date' => 'date:Y-m-d',
             'status' => TaskStatus::class,
         ];
+    }
+
+    protected static function booted()
+    {
+        parent::booted();
+
+        static::addGlobalScope(FilterUserId::class);
     }
 
     public function histories(): HasMany

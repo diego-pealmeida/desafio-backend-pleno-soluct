@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable(true)->constrained()->nullOnDelete();
             $table->string('title', 100);
-            $table->longText('description')->nullable(true);
+            $table->text('description')->nullable(true);
             $table->enum('status', ['pending', 'in_progress', 'completed', 'canceled'])->default('pending');
             $table->date('due_date')->nullable(true);
             $table->timestamps();

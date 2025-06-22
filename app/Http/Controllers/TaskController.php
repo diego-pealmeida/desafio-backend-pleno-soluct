@@ -2,48 +2,88 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
-use Illuminate\Http\Request;
+use App\Exceptions\Task\NotFoundException;
+use App\Http\Requests\Task\CreateRequest;
+use App\Http\Requests\Task\ListRequest;
+use App\Http\Requests\Task\UpdateRequest;
+use App\Services\Tasks\Service;
+use App\Traits\ApiResponse;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
+    public function __construct(private Service $taskService) {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    private function taskNotFoundResponse(): JsonResponse
     {
-        //
+        return $this->errorResponse(
+            "A tarefa informada é inválida",
+            Response::HTTP_UNPROCESSABLE_ENTITY
+        );
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Task $task)
+    public function index(ListRequest $request)
     {
-        //
+        $list = $this->taskService->listTasks($request->toData(), $request->toPaginationData(), $request->toOrdernationData());
+
+        return $this->successResponse($list);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Task $task)
+    public function store(CreateRequest $request)
     {
-        //
+        try {
+            $task = $this->taskService->createTask($request->toData());
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return $this->internalErrorResponse('cadastrar a tarefa');
+        }
+
+        return $this->successResponse($task, Response::HTTP_CREATED);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Task $task)
+    public function show(int $taskId)
     {
-        //
+        try {
+            $task = $this->taskService->getTask($taskId);
+        } catch (NotFoundException $e) {
+            return $this->taskNotFoundResponse();
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return $this->internalErrorResponse('cadastrar a tarefa');
+        }
+
+        return $this->successResponse($task);
+    }
+
+    public function update(UpdateRequest $request, int $taskId)
+    {
+        try {
+            $task = $this->taskService->updateTask($taskId, $request->toData());
+        } catch (NotFoundException $e) {
+            return $this->taskNotFoundResponse();
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return $this->internalErrorResponse('atualizar a tarefa');
+        }
+
+        return $this->successResponse($task, Response::HTTP_CREATED);
+    }
+
+    public function destroy(int $taskId)
+    {
+        try {
+            $this->taskService->deleteTask($taskId);
+        } catch (NotFoundException $e) {
+            return $this->taskNotFoundResponse();
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return $this->internalErrorResponse('remover a tarefa');
+        }
+
+        return $this->noContentResponse();
     }
 }
