@@ -1,0 +1,114 @@
+networks:
+    laravel:
+        driver: bridge
+
+volumes:
+    pgdata:
+    pgadmindata:
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: ./docker/php/Dockerfile
+        user: "1000:1000"
+        volumes:
+            - ./:/var/www
+        networks:
+            - laravel
+        depends_on:
+            - postgres
+            - redis
+
+    supervisor:
+        build:
+            context: .
+            dockerfile: docker/supervisor/Dockerfile
+        restart: unless-stopped
+        volumes:
+            - .:/var/www
+        depends_on:
+            - app
+            - redis
+        networks:
+            - laravel
+
+    webserver:
+        image: nginx:alpine
+        ports:
+            - "8000:80"
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d
+        depends_on:
+            - app
+        networks:
+            - laravel
+
+    postgres:
+        image: postgres:16.8
+        restart: always
+        environment:
+            POSTGRES_USER: ${DB_USERNAME:?}
+            POSTGRES_PASSWORD: ${DB_PASSWORD:?}
+            POSTGRES_DB: ${DB_DATABASE:?}
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready"]
+            interval: 1s
+            timeout: 5s
+            retries: 10
+        networks:
+            - laravel
+
+    pgadmin:
+        build:
+            context: ./docker/pgadmin
+            args:
+                POSTGRES_USER: ${DB_USERNAME:?}
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-dev@pgadmin.com}
+            PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-Mudar@123}
+        volumes:
+            - ./docker/pgadmin/data/pgadmin4.db:/var/lib/pgadmin/pgadmin4.db
+            - ./docker/pgadmin/config:/config
+            - pgadmindata:/var/lib/pgadmin/storage
+        ports:
+            - 5050:80
+        networks:
+            - laravel
+
+    redis:
+        image: redis:alpine
+        ports:
+            - "6379:6379"
+        networks:
+            - laravel
+
+    redisinsight:
+        image: redislabs/redisinsight:latest
+        volumes:
+            - ./docker/redisinsight/data/redisinsight.db:/data/redisinsight.db
+        ports:
+            - "5540:5540"
+        networks:
+            - laravel
+
+    mailpit:
+        image: axllent/mailpit
+        container_name: mailpit
+        restart: unless-stopped
+        volumes:
+            - ./data:/data
+        ports:
+            - 8025:8025
+            - 1025:1025
+        environment:
+            MP_MAX_MESSAGES: 5000
+            MP_DATABASE: /data/mailpit.db
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
+        networks:
+            - laravel
