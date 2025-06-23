@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\Auth\InvalidCredentialsException;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\Auth\AccessTokenResource;
 use App\Services\Auth\Service;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -28,7 +29,7 @@ class AuthController extends Controller
             return $this->internalErrorResponse('realizar o login');
         }
 
-        return $this->successResponse($accessToken);
+        return $this->successResponse(new AccessTokenResource($accessToken));
     }
 
     public function logout()

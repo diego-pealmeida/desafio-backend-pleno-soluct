@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\CreateRequest;
+use App\Http\Resources\User\Resource;
 use App\Repositories\User\Repository;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -22,6 +23,6 @@ class UserController extends Controller
             return $this->internalErrorResponse('cadastrar o usuário');
         }
 
-        return $this->successResponse($user, Response::HTTP_CREATED);
+        return $this->successResponse(new Resource($user), Response::HTTP_CREATED);
     }
 }

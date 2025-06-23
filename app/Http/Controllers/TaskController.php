@@ -6,8 +6,9 @@ use App\Exceptions\Task\NotFoundException;
 use App\Http\Requests\Task\CreateRequest;
 use App\Http\Requests\Task\ListRequest;
 use App\Http\Requests\Task\UpdateRequest;
+use App\Http\Resources\Task\ListResource;
+use App\Http\Resources\Task\Resource;
 use App\Services\Tasks\Service;
-use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -30,7 +31,7 @@ class TaskController extends Controller
     {
         $list = $this->taskService->listTasks($request->toData(), $request->toPaginationData(), $request->toOrdernationData());
 
-        return $this->successResponse($list);
+        return $this->successResponse(new ListResource($list));
     }
 
     public function store(CreateRequest $request)
@@ -42,7 +43,7 @@ class TaskController extends Controller
             return $this->internalErrorResponse('cadastrar a tarefa');
         }
 
-        return $this->successResponse($task, Response::HTTP_CREATED);
+        return $this->successResponse(new Resource($task), Response::HTTP_CREATED);
     }
 
     public function show(int $taskId)
@@ -56,7 +57,7 @@ class TaskController extends Controller
             return $this->internalErrorResponse('cadastrar a tarefa');
         }
 
-        return $this->successResponse($task);
+        return $this->successResponse(new Resource($task));
     }
 
     public function update(UpdateRequest $request, int $taskId)
@@ -70,7 +71,7 @@ class TaskController extends Controller
             return $this->internalErrorResponse('atualizar a tarefa');
         }
 
-        return $this->successResponse($task, Response::HTTP_CREATED);
+        return $this->successResponse(new Resource($task));
     }
 
     public function destroy(int $taskId)
