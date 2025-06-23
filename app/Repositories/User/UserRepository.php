@@ -2,6 +2,7 @@
 
 namespace App\Repositories\User;
 
+use App\Data\UserData;
 use App\Models\User;
 
 class UserRepository implements Repository
@@ -25,5 +26,19 @@ class UserRepository implements Repository
         return $this->model
             ->where('email', 'ilike', "%{$email}%")
             ->first();
+    }
+
+    public function create(UserData $data): User
+    {
+        $user = new $this->model;
+        $user->fill($data->toArray());
+
+        $user->password = bcrypt($data->password);
+
+        if (!$user->save()) {
+            //
+        }
+
+        return $user;
     }
 }
