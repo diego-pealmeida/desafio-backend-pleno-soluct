@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('old_value')->nullable(true);
             $table->text('new_value')->nullable(true);
             $table->timestamp('changed_at')->default('now()');
+            $table->timestamps();
         });
     }
 

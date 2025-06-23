@@ -19,7 +19,7 @@ class TaskHistory extends Model
     protected function casts(): array
     {
         return [
-            'changed_at' => 'date_Y-m-d H:i:s'
+            'changed_at' => 'date:Y-m-d H:i:s'
         ];
     }
 

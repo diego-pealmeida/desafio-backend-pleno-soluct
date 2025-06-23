@@ -12,6 +12,7 @@ class AppServiceProvider extends ServiceProvider
         /* Repositories */
         R\Auth\Repository::class => R\Auth\AuthRepository::class,
         R\Tasks\Repository::class => R\Tasks\TaskRepository::class,
+        R\TaskHistory\Repository::class => R\TaskHistory\TaskHistoryRepository::class,
         R\User\Repository::class => R\User\UserRepository::class,
 
         /* Services */
