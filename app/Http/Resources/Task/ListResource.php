@@ -11,8 +11,8 @@ class ListResource extends JsonResource
     {
         return [
             'data'              => Resource::collection($this->data),
-            'total'             => $this->total,
-            'total_filtered'    => $this->total_filtered
+            'total'             => (int) $this->total,
+            'total_filtered'    => (int) $this->total_filtered
         ];
     }
 }

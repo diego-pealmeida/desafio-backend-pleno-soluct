@@ -9,10 +9,12 @@ use App\Http\Requests\Task\UpdateRequest;
 use App\Http\Resources\Task\ListResource;
 use App\Http\Resources\Task\Resource;
 use App\Services\Tasks\Service;
+use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
+#[Group(name: 'Tarefas')]
 class TaskController extends Controller
 {
     public function __construct(private Service $taskService) {
@@ -27,6 +29,9 @@ class TaskController extends Controller
         );
     }
 
+    /**
+     * Listar
+     */
     public function index(ListRequest $request)
     {
         $list = $this->taskService->listTasks($request->toData(), $request->toPaginationData(), $request->toOrdernationData());
@@ -34,6 +39,9 @@ class TaskController extends Controller
         return $this->successResponse(new ListResource($list));
     }
 
+    /**
+     * Incluir
+     */
     public function store(CreateRequest $request)
     {
         try {
@@ -46,6 +54,9 @@ class TaskController extends Controller
         return $this->successResponse(new Resource($task), Response::HTTP_CREATED);
     }
 
+    /**
+     * Buscar Específica
+     */
     public function show(int $taskId)
     {
         try {
@@ -60,6 +71,9 @@ class TaskController extends Controller
         return $this->successResponse(new Resource($task));
     }
 
+    /**
+     * Atualizar
+     */
     public function update(UpdateRequest $request, int $taskId)
     {
         try {
@@ -74,6 +88,9 @@ class TaskController extends Controller
         return $this->successResponse(new Resource($task));
     }
 
+    /**
+     * Remover
+     */
     public function destroy(int $taskId)
     {
         try {

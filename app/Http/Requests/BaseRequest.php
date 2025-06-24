@@ -12,6 +12,14 @@ abstract class BaseRequest extends FormRequest
 {
     use ApiResponse;
 
+    /**
+     * @response 422 {
+     *  "errors": [
+     *      "string",
+     *      "string"
+     *  ]
+     * }
+     */
     protected function failedValidation(Validator $validator)
     {
         if ($this->expectsJson()) {

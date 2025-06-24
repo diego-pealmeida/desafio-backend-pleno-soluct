@@ -6,15 +6,22 @@ use App\Exceptions\Auth\InvalidCredentialsException;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\Auth\AccessTokenResource;
 use App\Services\Auth\Service;
+use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
+#[Group(name: 'Autenticação')]
 class AuthController extends Controller
 {
     public function __construct(private Service $authService) {
         //
     }
 
+    /**
+     * Autenticar
+     *
+     * @unauthenticated
+     */
     public function login(LoginRequest $request)
     {
         try {
@@ -32,6 +39,11 @@ class AuthController extends Controller
         return $this->successResponse(new AccessTokenResource($accessToken));
     }
 
+    /**
+     * Revogar Token Atual
+     *
+     *  @unauthenticated
+     */
     public function logout()
     {
         try {

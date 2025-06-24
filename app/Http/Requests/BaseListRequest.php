@@ -12,7 +12,7 @@ class BaseListRequest extends BaseRequest
     {
         return [
             'page'                  => 'nullable|integer|min:0',
-            'limit'                 => 'nullable|integer|between:1,200',
+            'limit'                 => 'nullable|integer|min:1|max:200',
             'columns_order'         => 'nullable|array',
             'columns_order.*.field' => 'string',
             'columns_order.*.order' => 'string|in:asc,desc'
