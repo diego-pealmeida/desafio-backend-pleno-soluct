@@ -5,6 +5,7 @@ namespace App\Repositories\User;
 use App\Data\UserData;
 use App\Exceptions\User\CreateException;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository implements Repository
 {
@@ -21,10 +22,10 @@ class UserRepository implements Repository
 
     public function create(UserData $data): User
     {
-        $user = new $this->model;
+        $user = $this->model;
         $user->fill($data->toArray());
 
-        $user->password = bcrypt($data->password);
+        $user->password = Hash::make($user->password);
 
         if (!$user->save())
             throw new CreateException('An error occured when trying to create the user');

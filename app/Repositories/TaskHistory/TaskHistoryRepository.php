@@ -14,7 +14,7 @@ class TaskHistoryRepository implements Repository
 
     public function create(TaskHistoryData $data): TaskHistory
     {
-        $history = new $this->model;
+        $history = $this->model;
         $history->fill($data->toArray());
 
         if (!$history->save())

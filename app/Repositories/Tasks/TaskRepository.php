@@ -42,7 +42,7 @@ class TaskRepository implements Repository
 
     public function create(TaskData $data): Task
     {
-        $task = new $this->taskModel;
+        $task = $this->taskModel;
         $task->fill($data->toArray());
 
         if (!$task->save())
