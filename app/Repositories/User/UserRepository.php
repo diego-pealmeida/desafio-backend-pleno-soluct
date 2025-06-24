@@ -3,6 +3,7 @@
 namespace App\Repositories\User;
 
 use App\Data\UserData;
+use App\Exceptions\User\CreateException;
 use App\Models\User;
 
 class UserRepository implements Repository
@@ -35,9 +36,8 @@ class UserRepository implements Repository
 
         $user->password = bcrypt($data->password);
 
-        if (!$user->save()) {
-            //
-        }
+        if (!$user->save())
+            throw new CreateException('An error occured when trying to create the user');
 
         return $user;
     }
