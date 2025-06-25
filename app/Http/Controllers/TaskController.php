@@ -25,7 +25,7 @@ class TaskController extends Controller
     {
         return $this->errorResponse(
             "A tarefa informada é inválida",
-            Response::HTTP_UNPROCESSABLE_ENTITY
+            Response::HTTP_NOT_FOUND
         );
     }
 

@@ -16,7 +16,7 @@ class UserRepository implements Repository
     public function findByEmail(string $email): User|null
     {
         return $this->model
-            ->where('email', 'ilike', "%{$email}%")
+            ->whereRaw('LOWER(email) = ?', mb_strtolower($email, 'UTF-8'))
             ->first();
     }
 

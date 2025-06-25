@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\app\Repositories\Tasks;
+namespace Tests\Unit\App\Repositories\Tasks;
 
 use App\Data\ListResponseData;
 use App\Data\OrdernationData;

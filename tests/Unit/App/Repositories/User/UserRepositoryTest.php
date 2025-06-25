@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\app\Repositories\User;
+namespace Tests\Unit\App\Repositories\User;
 
 use App\Data\UserData;
 use App\Exceptions\User\CreateException;
@@ -24,8 +24,8 @@ class UserRepositoryTest extends TestCase
     {
         $userMock = Mockery::mock(User::class);
 
-        $userMock->shouldReceive('where')
-            ->with('email', 'ilike', '%john@example.com%')
+        $userMock->shouldReceive('whereRaw')
+            ->with('LOWER(email) = ?', 'john@example.com')
             ->once()
             ->andReturnSelf();
         $userMock->shouldReceive('first')
@@ -42,7 +42,7 @@ class UserRepositoryTest extends TestCase
     public function test_it_returns_null_if_email_not_found()
     {
         $mock = Mockery::mock(User::class);
-        $mock->shouldReceive('where')->andReturnSelf();
+        $mock->shouldReceive('whereRaw')->andReturnSelf();
         $mock->shouldReceive('first')->andReturn(null);
 
         $repository = new UserRepository($mock);

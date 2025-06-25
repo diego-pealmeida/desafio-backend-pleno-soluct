@@ -12,7 +12,7 @@ class CreateRequest extends BaseRequest
     {
         return [
             'name'      => 'required|string|min:3|max:60',
-            'email'     => 'required|email|max:100',
+            'email'     => 'required|email|max:100|unique:users,email',
             'password'  => [
                 'required',
                 Password::min(8)
