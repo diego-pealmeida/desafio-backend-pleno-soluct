@@ -32,7 +32,7 @@ docker run --rm \
 - Levante todos os containers docker
 
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
 
 - Gere a chave da aplicação
@@ -61,11 +61,11 @@ Dentre os serviços em containers, há um serviço de banco de dados com Postgre
 
 ### PgAdmin4
 
-Acessando a url `http://localhost:5050` você acessa o painel administrativo do PgAdmin para poder visualizar o banco de dados sem necessitar de uma instalação a parte. Você pode usar os dados de `dev@pgadmin.com` e `Mudar@123` como usuário e senha, respectivamente.
+Acessando a url [http://localhost:5050](http://localhost:5050) você acessa o painel administrativo do PgAdmin para poder visualizar o banco de dados sem necessitar de uma instalação a parte. Você pode usar os dados de `dev@pgadmin.com` e `Mudar@123` como usuário e senha, respectivamente.
 
 ### RedisInsight
 
-Acessando a url `http://localhost:5540` você terá acesso ao painel administrativo para o Redis (RedisInsight).
+Acessando a url [http://localhost:5540](http://localhost:5540) você terá acesso ao painel administrativo para o Redis (RedisInsight).
 
 ### Supervisor
 
@@ -73,7 +73,7 @@ O sistema possui um supervisor entre seus serviços que ficará responsável por
 
 ### Documentação de API
 
-Foi usada a biblioteca `dedoc/scramble` para geração de uma documentação de API básica e funcional. Para acessar a documentação, após levantar os containers, basta acessar a URL `http://localhost:8000/docs/api`
+Foi usada a biblioteca `dedoc/scramble` para geração de uma documentação de API básica e funcional. Para acessar a documentação, após levantar os containers, basta acessar a URL [http://localhost:8000/docs/api](http://localhost:8000/docs/api)
 
 ### Sanctum
 
@@ -81,7 +81,7 @@ O sistema conta com authenticação com token para gerenciamento de tarefas, par
 
 ### Horizon
 
-Para ajudar na visualização na execução de jobs, foi instalado o Laravel Horizon, e é possível acessar seu painel para URL `http://localhost:8000/horizon`
+Para ajudar na visualização na execução de jobs, foi instalado o Laravel Horizon, e é possível acessar seu painel para URL [http://localhost:8000/horizon](http://localhost:8000/horizon)
 
 ### PHPUnit
 
