@@ -106,3 +106,7 @@ curl --request GET \
   ...
   --header 'Authorization: Bearer {seu_token_aqui}'
 ```
+
+## Histórico de alterações
+
+Foi adicionado a criação de histórico de alterações de tarefas, o mesmo é criado automaticamente sempre que um campo é alterado em uma tarefa pelo método PUT, é executado um JOB em segundo plano que criar o histórico, ou seja, o mesmo depende das filas estarem em execução e podem ser observados no painel do horizon
